@@ -24,7 +24,7 @@ export const Route = createFileRoute('/api/public/evolution/webhook')({
           } else if (event === 'connection.update') {
             const state = body.data?.state;
             const phone = typeof body.data?.wuid === 'string' ? body.data.wuid.split('@')[0] : undefined;
-            if (state === 'open') await supabaseAdmin.from('platform_connections').update({ status: 'connected', qr_code: null, error: null, verified_at: new Date().toISOString(), revoked_at: null, ...(phone ? { phone_number: phone, account_name: `+${phone}` } : {}) }).eq('id', conn.id);
+            if (state === 'open' && (await import('@/lib/channels.server').then(m => m.evolution(`/instance/connectionState/${conn.instance_name}`)).then(r => r?.instance?.state).catch(() => null)) === 'open') await supabaseAdmin.from('platform_connections').update({ status: 'connected', qr_code: null, pairing_code: null, error: null, verified_at: new Date().toISOString(), revoked_at: null, ...(phone ? { phone_number: phone, account_name: `+${phone}` } : {}) }).eq('id', conn.id);
             else if (state === 'close') await supabaseAdmin.from('platform_connections').update({ status: 'disconnected', verified_at: null }).eq('id', conn.id);
           } else if (event === 'messages.upsert') {
             const items = Array.isArray(body.data) ? body.data : [body.data];
