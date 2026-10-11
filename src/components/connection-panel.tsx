@@ -4,14 +4,19 @@ import { CircleAlert, CircleCheck, Loader2, RefreshCw, Unplug } from 'lucide-rea
 import { Button } from '@/components/ui/button';
 import { SocialIcon, type SocialPlatform } from '@/components/social-icon';
 import { useAccount } from '@/components/account-provider';
-import { disconnectPlatform, getConnection, metaStartOAuth, whatsappConnect, whatsappRefresh, type ConnectionView } from '@/lib/channels.functions';
+import { WhatsappPairing } from '@/components/whatsapp-pairing';
+import { disconnectPlatform, getConnection, metaStartOAuth, whatsappRefresh, type ConnectionView } from '@/lib/channels.functions';
 
 const statusText = { connected: 'متصل', pending: 'بانتظار المسح', disconnected: 'غير متصل', error: 'خطأ في الاتصال' } as const;
 
 export function ConnectionPanel({ platform, label }: { platform: SocialPlatform; label: string }) {
+  if (platform === 'whatsapp') return <WhatsappPairing />;
+  return <MetaConnectionPanel platform={platform} label={label} />;
+}
+
+function MetaConnectionPanel({ platform, label }: { platform: SocialPlatform; label: string }) {
   const { refreshConnections } = useAccount();
   const fetchConn = useServerFn(getConnection);
-  const waConnect = useServerFn(whatsappConnect);
   const waRefresh = useServerFn(whatsappRefresh);
   const disconnect = useServerFn(disconnectPlatform);
   const metaStart = useServerFn(metaStartOAuth);
@@ -44,8 +49,7 @@ export function ConnectionPanel({ platform, label }: { platform: SocialPlatform;
   async function connect() {
     setBusy('connect'); setError('');
     try {
-      if (platform === 'whatsapp') { setConn(await waConnect({ data: { origin: window.location.origin } })); }
-      else {
+      {
         const { url } = await metaStart({ data: { platform, origin: window.location.origin } });
         const w = window.open(url, '_blank');
         if (!w) window.location.href = url;
