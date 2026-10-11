@@ -812,6 +812,8 @@ export type Database = {
           instance_name: string | null
           metadata: Json
           page_id: string | null
+          pairing_code: string | null
+          pairing_phone: string | null
           phone_number: string | null
           platform: Database["public"]["Enums"]["platform_name"]
           provider_account_id: string
@@ -834,6 +836,8 @@ export type Database = {
           instance_name?: string | null
           metadata?: Json
           page_id?: string | null
+          pairing_code?: string | null
+          pairing_phone?: string | null
           phone_number?: string | null
           platform: Database["public"]["Enums"]["platform_name"]
           provider_account_id?: string
@@ -856,6 +860,8 @@ export type Database = {
           instance_name?: string | null
           metadata?: Json
           page_id?: string | null
+          pairing_code?: string | null
+          pairing_phone?: string | null
           phone_number?: string | null
           platform?: Database["public"]["Enums"]["platform_name"]
           provider_account_id?: string
