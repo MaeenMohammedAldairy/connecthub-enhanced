@@ -37,7 +37,7 @@ async function ownerPhone(evolution: Evo, instanceName: string): Promise<{ phone
   const list = await evolution(`/instance/fetchInstances?instanceName=${encodeURIComponent(instanceName)}`).catch(() => null);
   const item = Array.isArray(list) ? list[0] : list;
   const jid: string | undefined = item?.ownerJid ?? item?.instance?.owner;
-  return { phone: jid ? jid.split('@')[0].split(':')[0] : null, name: item?.profileName ?? item?.instance?.profileName ?? null };
+  return { phone: jid ? (jid.split('@')[0] ?? '').split(':')[0] ?? null : null, name: item?.profileName ?? item?.instance?.profileName ?? null };
 }
 
 /** Checks the Evolution server is reachable and reports its version (GET / → { status, version }). */
