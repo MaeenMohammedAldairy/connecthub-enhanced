@@ -1348,3 +1348,28 @@ h1, h2, h3, p, label, dd { overflow-wrap: anywhere; }
  .quick-link h2 { font-size: 1rem; }
  .product-detail-heading { grid-template-columns: auto minmax(0,1fr); }
 }
+
+/* WhatsApp pairing-code panel */
+.wa-panel { display: grid; gap: 1rem; width: 100%; max-width: 32rem; margin-inline: auto; padding: 1.25rem; border: 1px solid var(--border); border-radius: var(--radius-xl); background: var(--card); color: var(--card-foreground); }
+.wa-panel svg { width: 1.1rem; height: 1.1rem; flex-shrink: 0; }
+.wa-form { display: grid; gap: .6rem; }
+.wa-label { font-weight: 700; font-size: .95rem; }
+.wa-phone { display: grid; grid-template-columns: minmax(0, 9rem) minmax(0, 1fr); gap: .5rem; }
+.wa-phone select, .wa-phone input { min-height: 3rem; border: 1px solid var(--input); border-radius: var(--radius-lg); background: var(--background); color: var(--foreground); padding-inline: .75rem; font-size: 1rem; min-width: 0; }
+.wa-phone input { letter-spacing: .05em; }
+.wa-phone select:focus, .wa-phone input:focus { outline: 2px solid var(--ring); outline-offset: 1px; }
+.wa-muted { display: flex; align-items: center; gap: .4rem; color: var(--muted-foreground); font-size: .85rem; }
+.wa-alert, .wa-warn { display: flex; align-items: flex-start; gap: .5rem; padding: .7rem .85rem; border-radius: var(--radius-lg); font-size: .875rem; line-height: 1.7; }
+.wa-alert { background: color-mix(in oklch, var(--destructive) 10%, transparent); color: var(--destructive); }
+.wa-warn { background: color-mix(in oklch, var(--chart-4) 18%, transparent); color: var(--foreground); }
+.wa-code-box { display: grid; gap: .75rem; text-align: center; }
+.wa-code { justify-self: center; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: clamp(1.75rem, 8vw, 2.5rem); font-weight: 800; letter-spacing: .2em; padding: .75rem 1.25rem; border-radius: var(--radius-xl); border: 2px dashed var(--positive); background: color-mix(in oklch, var(--positive) 8%, transparent); color: var(--foreground); cursor: pointer; }
+.wa-code-meta { display: flex; justify-content: space-between; gap: .5rem; color: var(--muted-foreground); font-size: .8rem; }
+.wa-code-meta span { display: inline-flex; align-items: center; gap: .3rem; }
+.wa-steps { display: grid; gap: .35rem; padding-inline-start: 1.25rem; list-style: decimal; text-align: start; font-size: .9rem; line-height: 1.8; }
+.wa-connected { display: flex; align-items: center; gap: .75rem; color: var(--positive); }
+.wa-connected svg { width: 2rem; height: 2rem; }
+.wa-connected div { display: grid; gap: .15rem; color: var(--foreground); }
+.wa-connected small { color: var(--muted-foreground); }
+.wa-actions { display: flex; flex-wrap: wrap; gap: .5rem; }
+.wa-actions > * { flex: 1 1 10rem; min-height: 2.75rem; }
