@@ -42,7 +42,7 @@ export function AuthScreen({ signup = false }: { signup?: boolean }) {
         : m.includes('already registered') || m.includes('already been registered') ? 'هذا البريد مسجل مسبقًا. سجّل الدخول أو استعد كلمة المرور.'
         : m.includes('password') && (m.includes('weak') || m.includes('pwned') || m.includes('at least')) ? 'كلمة المرور ضعيفة. استخدم 8 أحرف على الأقل مع أرقام ورموز.'
         : m.includes('rate limit') || m.includes('too many') ? 'محاولات كثيرة. انتظر قليلًا ثم حاول مجددًا.'
-        : m.includes('invalid') && m.includes('email') ? 'صيغة البريد الإلكتروني غير صحيحة.'
+        : (m.includes('invalid') || m.includes('not allowed')) && m.includes('email') ? 'صيغة البريد الإلكتروني غير صحيحة.'
         : '';
       if (known) { setError(known); return; }
       setError(reset ? 'تعذر إرسال الرسالة الآن. حاول مجددًا.' : signup ? 'تعذر إنشاء الحساب. تحقق من البريد وكلمة المرور أو حاول لاحقًا.' : 'تعذر تسجيل الدخول. تحقق من بياناتك وتأكيد بريدك الإلكتروني.');
