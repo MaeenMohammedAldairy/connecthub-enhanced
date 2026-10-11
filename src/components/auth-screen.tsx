@@ -17,7 +17,7 @@ export function AuthScreen({ signup = false }: { signup?: boolean }) {
   async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault(); setBusy(true); setError(''); setNotice('');
     const form = new FormData(e.currentTarget);
-    const email = String(form.get('email') ?? '');
+    const email = String(form.get('email') ?? '').trim().toLowerCase();
     const password = String(form.get('password') ?? '');
     try {
       if (reset) {
@@ -35,15 +35,27 @@ export function AuthScreen({ signup = false }: { signup?: boolean }) {
         if (result.error) throw result.error;
         await navigate({ to: '/' });
       }
-    } catch { setError(reset ? 'تعذر إرسال الرسالة الآن. حاول مجددًا.' : signup ? 'تعذر إنشاء الحساب. تحقق من البريد وكلمة المرور أو حاول لاحقًا.' : 'تعذر تسجيل الدخول. تحقق من بياناتك وتأكيد بريدك الإلكتروني.'); }
+    } catch (err) {
+      const m = String((err as { message?: string })?.message ?? '').toLowerCase();
+      const known = m.includes('invalid login credentials') ? 'البريد الإلكتروني أو كلمة المرور غير صحيحة.'
+        : m.includes('email not confirmed') ? 'لم يتم تأكيد بريدك بعد. افتح رسالة التأكيد في بريدك ثم سجّل الدخول.'
+        : m.includes('already registered') || m.includes('already been registered') ? 'هذا البريد مسجل مسبقًا. سجّل الدخول أو استعد كلمة المرور.'
+        : m.includes('password') && (m.includes('weak') || m.includes('pwned') || m.includes('at least')) ? 'كلمة المرور ضعيفة. استخدم 8 أحرف على الأقل مع أرقام ورموز.'
+        : m.includes('rate limit') || m.includes('too many') ? 'محاولات كثيرة. انتظر قليلًا ثم حاول مجددًا.'
+        : m.includes('invalid') && m.includes('email') ? 'صيغة البريد الإلكتروني غير صحيحة.'
+        : '';
+      if (known) { setError(known); return; }
+      setError(reset ? 'تعذر إرسال الرسالة الآن. حاول مجددًا.' : signup ? 'تعذر إنشاء الحساب. تحقق من البريد وكلمة المرور أو حاول لاحقًا.' : 'تعذر تسجيل الدخول. تحقق من بياناتك وتأكيد بريدك الإلكتروني.');
+    }
     finally { setBusy(false); }
   }
   async function google() {
     setBusy(true); setError('');
     try {
       const result = await lovable.auth.signInWithOAuth('google', { redirect_uri: `${window.location.origin}/auth` });
-      if (result.error) { setError('تعذر تسجيل الدخول عبر Google.'); return; }
-      if (!result.redirected) await navigate({ to: '/' });
+      if (result.error) { setError('تعذر تسجيل الدخول عبر Google. حاول مجددًا.'); return; }
+      if (result.redirected) return;
+      await navigate({ to: '/' });
     } finally { setBusy(false); }
   }
   return <main className="auth-shell" dir="rtl">
